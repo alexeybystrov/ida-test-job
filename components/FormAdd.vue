@@ -1,11 +1,12 @@
 <template>
-  <div class="form">
+  <form class="form" @submit.prevent="handleSubmit">
     <label
       class="form__label form__label_required"
       for="name"
     >Наименование товара</label>
     <input
       id="name"
+      v-model="name"
       class="form__input"
       type="text"
       placeholder="Введите наименование товара"
@@ -13,6 +14,7 @@
     <label class="form__label" for="description">Описание товара</label>
     <textarea
       id="description"
+      v-model="description"
       class="form__textarea"
       type="text"
       placeholder="Введите описание товара"
@@ -23,6 +25,7 @@
     >Ссылка на изображение товара</label>
     <input
       id="image"
+      v-model="image"
       class="form__input"
       type="text"
       placeholder="Введите ссылку"
@@ -33,6 +36,7 @@
     >Цена товара</label>
     <input
       id="price"
+      v-model="price"
       class="form__input"
       type="text"
       placeholder="Введите цену"
@@ -40,8 +44,30 @@
     <button class="form__button" type="submit">
       Добавить товар
     </button>
-  </div>
+  </form>
 </template>
+
+<script>
+import _ from 'lodash'
+export default {
+  data () {
+    return {
+      name: '',
+      description: '',
+      image: '',
+      price: ''
+    }
+  },
+
+  methods: {
+    handleSubmit () {
+      const id = _.uniqueId()
+      const { name, description, image, price } = this
+      this.$store.commit('addCard', { id, name, description, image, price })
+    }
+  }
+}
+</script>
 
 <style lang="scss" scoped>
 .form {
