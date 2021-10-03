@@ -11,24 +11,28 @@
     />
     <img
       class="card__image"
-      src="https://picsum.photos/1000"
-      alt="Grapefruit slice atop a pile of other slices"
+      :src="card.image"
     >
     <p class="name">
-      Наименование товара
+      {{ card.name }}
     </p>
     <p class="description">
-      Довольно-таки интересное описание товара в несколько строк. Довольно-таки
-      интересное описание товара в несколько строк
+      {{ card.description }}
     </p>
     <p class="price">
-      9000руб
+      {{ card.price }}руб.
     </p>
   </div>
 </template>
 
 <script>
 export default {
+  props: {
+    card: {
+      type: Object,
+      required: true
+    }
+  },
   data () {
     return {
       showDeleteButton: false
@@ -74,8 +78,8 @@ export default {
 .card__image {
   display: block;
   margin: 0 auto 0 auto;
-  max-height: 200px;
-  width: 100%;
+  height: 200px;
+  max-width: 100%;
 
   border-radius: 4px 4px 0 0;
 }

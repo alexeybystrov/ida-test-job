@@ -1,16 +1,17 @@
 <template>
   <div class="list">
-    <Card v-for="item of iter" :key="item" />
+    <Card v-for="card of allCards" :key="card.id" :card="card" />
   </div>
 </template>
 
 <script>
+import _ from 'lodash'
 import Card from '@/components/Card.vue'
 export default {
   components: { Card },
-  data () {
-    return {
-      iter: ['a', 'b', 'c', 'd', 'e']
+  computed: {
+    allCards () {
+      return _.sortBy(this.$store.getters.allCards, 'id').reverse()
     }
   }
 }
