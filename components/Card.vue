@@ -41,7 +41,7 @@ export default {
 
   methods: {
     handleDeleteCard () {
-      alert('delete clicked!')
+      this.$store.commit('deleteCard', this.card.id)
     }
   }
 }
@@ -106,7 +106,9 @@ export default {
 }
 
 .price {
-  margin: 32px 0 24px 16px;
+  position: absolute;
+  left: 16px;
+  bottom: 0;
 
   font-weight: 600;
   font-size: 24px;

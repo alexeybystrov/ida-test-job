@@ -48,7 +48,6 @@
 </template>
 
 <script>
-import _ from 'lodash'
 export default {
   data () {
     return {
@@ -61,7 +60,7 @@ export default {
 
   methods: {
     handleSubmit () {
-      const id = _.uniqueId()
+      const id = Date.now()
       const { name, description, image, price } = this
       this.$store.commit('addCard', { id, name, description, image, price })
     }
