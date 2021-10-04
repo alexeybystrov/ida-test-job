@@ -6,15 +6,19 @@
     >Наименование товара</label>
     <input
       id="name"
-      v-model="name"
+      v-model="form.name"
       class="form__input"
+      :class="{ form__input_invalid: !isNameValid && uiShowWarn.name }"
       type="text"
       placeholder="Введите наименование товара"
     >
+    <div v-show="!isNameValid && uiShowWarn.name" class="form__error-message">
+      Поле является обязательным
+    </div>
     <label class="form__label" for="description">Описание товара</label>
     <textarea
       id="description"
-      v-model="description"
+      v-model="form.description"
       class="form__textarea"
       type="text"
       placeholder="Введите описание товара"
@@ -25,23 +29,38 @@
     >Ссылка на изображение товара</label>
     <input
       id="image"
-      v-model="image"
+      v-model="form.image"
       class="form__input"
-      type="text"
+      :class="{ form__input_invalid: !isImageValid && uiShowWarn.image }"
+      type="url"
       placeholder="Введите ссылку"
     >
+    <div v-show="!isImageValid && uiShowWarn.image" class="form__error-message">
+      Поле является обязательным
+    </div>
     <label
       class="form__label form__label_required"
       for="price"
     >Цена товара</label>
     <input
       id="price"
-      v-model="price"
+      v-model="form.price"
       class="form__input"
-      type="text"
+      :class="{ form__input_invalid: !isPriceValid && uiShowWarn.price }"
+      type="number"
       placeholder="Введите цену"
     >
-    <button class="form__button" type="submit">
+    <div v-show="!isPriceValid && uiShowWarn.price" class="form__error-message">
+      Поле является обязательным
+    </div>
+    <button
+      class="form__button"
+      :class="{
+        form__button_active: isFormValid,
+        form__button_disabled: !isFormValid,
+      }"
+      type="submit"
+    >
       Добавить товар
     </button>
   </form>
@@ -51,18 +70,79 @@
 export default {
   data () {
     return {
-      name: '',
-      description: '',
-      image: '',
-      price: ''
+      form: {
+        name: '',
+        description: '',
+        image: '',
+        price: ''
+      },
+      uiShowWarn: {
+        name: false,
+        image: false,
+        price: false
+      }
+    }
+  },
+
+  computed: {
+    isNameValid () {
+      return this.form.name.length !== 0
+    },
+
+    isImageValid () {
+      return /^https?:\/\//.test(this.form.image)
+    },
+
+    isPriceValid () {
+      return this.form.price.length !== 0 &&
+        typeof this.form.price.length === 'number'
+    },
+
+    isFormValid () {
+      return this.isNameValid && this.isImageValid && this.isPriceValid
     }
   },
 
   methods: {
     handleSubmit () {
+      if (!this.isFormValid) {
+        this.setWarnings()
+        return
+      }
+
       const id = Date.now()
-      const { name, description, image, price } = this
-      this.$store.commit('addCard', { id, name, description, image, price })
+      const payload = { ...this.form, id }
+      this.$store.commit('addCard', payload)
+      this.resetForm()
+      this.resetWarnings()
+    },
+
+    resetForm () {
+      const keys = Object.keys(this.form)
+      keys.forEach((key) => {
+        this.form[key] = ''
+      })
+    },
+
+    setWarnings () {
+      if (!this.isNameValid) {
+        this.uiShowWarn.name = true
+      }
+
+      if (!this.isImageValid) {
+        this.uiShowWarn.image = true
+      }
+
+      if (!this.isPriceValid) {
+        this.uiShowWarn.price = true
+      }
+    },
+
+    resetWarnings () {
+      const keys = Object.keys(this.uiShowWarn)
+      keys.forEach((key) => {
+        this.uiShowWarn[key] = false
+      })
     }
   }
 }
@@ -124,6 +204,23 @@ export default {
   border-radius: 4px;
 }
 
+.form__input_invalid {
+  border: 1px solid #FF8484;
+}
+
+.form__error-message {
+  position: absolute;
+
+  margin-top: -12px;
+
+  font-size: 8px;
+  line-height: 10px;
+  letter-spacing: -0.02em;
+  color: #FF8484;
+
+  background: transparent;
+}
+
 .form__textarea {
   @extend .form__input;
   height: 108px;
@@ -149,12 +246,22 @@ export default {
   line-height: 15px;
   text-align: center;
   letter-spacing: -0.02em;
-  color: #b4b4b4;
 
-  background: #eeeeee;
   border: 1px solid #e5e5e5;
   border-radius: 10px;
 
   cursor: pointer;
+}
+
+.form__button_disabled {
+  color: #b4b4b4;
+
+  background: #eeeeee;
+}
+
+.form__button_active {
+  color: #ffffff;
+
+  background: #7bae73;
 }
 </style>
