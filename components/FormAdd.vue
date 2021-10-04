@@ -45,9 +45,10 @@
     <input
       id="price"
       v-model="form.price"
+      v-mask="priceMask"
       class="form__input"
       :class="{ form__input_invalid: !isPriceValid && uiShowWarn.price }"
-      type="number"
+      type="text"
       placeholder="Введите цену"
     >
     <div v-show="!isPriceValid && uiShowWarn.price" class="form__error-message">
@@ -67,9 +68,19 @@
 </template>
 
 <script>
+import createNumberMask from 'text-mask-addons/dist/createNumberMask'
+const priceMask = createNumberMask({
+  prefix: '',
+  allowDecimal: true,
+  decimalSymbol: ',',
+  includeThousandsSeparator: true,
+  thousandsSeparatorSymbol: ' ',
+  allowNegative: false
+})
 export default {
   data () {
     return {
+      priceMask,
       form: {
         name: '',
         description: '',
