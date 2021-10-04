@@ -239,10 +239,7 @@ export default {
   resize: none;
 }
 
-.form__input::placeholder {
-  color: #b4b4b4;
-}
-
+.form__input::placeholder,
 .form__textarea::placeholder {
   color: #b4b4b4;
 }

@@ -20,7 +20,7 @@
       {{ card.description }}
     </p>
     <p class="price">
-      {{ card.price }}руб.
+      {{ card.price }} руб.
     </p>
   </div>
 </template>
