@@ -40,8 +40,7 @@ const mutations = {
   },
 
   deleteCard (state, payload) {
-    const indexToDelete = state.cards
-      .findIndex(({ id }) => Number(id) === Number(payload))
+    const indexToDelete = state.cards.findIndex(({ id }) => id === payload)
     state.cards.splice(indexToDelete, 1)
   }
 }
